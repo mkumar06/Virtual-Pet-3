@@ -16,7 +16,8 @@ function setup() {
 
   //Add images
   dog.addImage(dogImg);
-  dog.addImage(happyDogImg);
+  //dog.addImage(happyDogImg);
+  dog.scale = 0.1;
 
   //Assigned firebase database to variable db
   db = firebase.database();
@@ -28,18 +29,13 @@ function setup() {
 
 
 function draw() {  
-  background("46, 139, 87");
-
-  if(keyWentDown(UP_ARROW)) {
-    writeStock(foodS);
-    dog.addImage(happyDog);
-  }
+  background(46, 139, 87);
 
   drawSprites();
   
   //Print text and add styles 
   fill("blue");
-  text("Food stock: " + foodS);
+  text("Food stock: " + foodS, 400, 20);
 }
 
 //Function to read values from DB
@@ -60,5 +56,10 @@ function writeStock(x) {
   })
 }
 
-
+function keyPressed() {
+  if(keyCode === UP_ARROW) {
+    writeStock(foodS);
+    dog.changeImage(happyDogImg);
+  }
+}
 
