@@ -1,5 +1,5 @@
 //Create variables 
-var dog, happyDog, foodS, foodStock, db;
+var dog, happyDog, foodS, foodStock, lastFed, db;
 var dogImg, happyDogImg;
 
 function preload()
@@ -35,7 +35,15 @@ function draw() {
   
   //Print text and add styles 
   fill("blue");
+  textSize(15);
   text("Food stock: " + foodS, 400, 20);
+}
+if(lastFed > 12) {
+  text("Last Fed: " + lastFed % 12 + "PM", 350, 30);
+} else if(lastFed == 0) {
+  text("Last Fed: 12 AM" , 350, 30);
+} else {
+  text("Last Fed: " + lastFed + "AM", 350, 30);
 }
 
 //Function to read values from DB
