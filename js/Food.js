@@ -1,5 +1,5 @@
-class Box {
-    constructor(x, y, width, height) {
+class Food {
+    constructor() {
       var options = {
         restitution: 0.4,
         friction: 0.25,
