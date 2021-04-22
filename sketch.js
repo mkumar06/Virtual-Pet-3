@@ -25,6 +25,8 @@ function setup() {
   //Fetch the foodStock from the database I created
   foodStock = db.ref('Food');
     foodStock.on("value", readStock);
+
+  fd = new Food()
 }
 
 
@@ -50,6 +52,8 @@ if(lastFed > 12) {
 function readStock(data) {
   foodS = data.val();
 }
+
+fd.display()
 
 //Function to write values in DB
 function writeStock(x) {
