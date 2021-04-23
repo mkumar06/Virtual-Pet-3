@@ -39,6 +39,8 @@ function draw() {
   fill("blue");
   textSize(15);
   text("Food stock: " + foodS, 400, 20);
+
+  fd.display()
 }
 if(lastFed > 12) {
   text("Last Fed: " + lastFed % 12 + "PM", 350, 30);
@@ -52,8 +54,6 @@ if(lastFed > 12) {
 function readStock(data) {
   foodS = data.val();
 }
-
-fd.display()
 
 //Function to write values in DB
 function writeStock(x) {
