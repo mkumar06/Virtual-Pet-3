@@ -3,9 +3,7 @@ class Food {
     this.image = loadImage("images/milkImg.png");
     this.foodStock = 0; 
     this.lastFed;
-    this.width = width + 20;
-    this.height = height + 15;
-    World.add(world, this.body);
+   
     }
     display() {
         var x = 80, y=100;
