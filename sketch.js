@@ -16,7 +16,6 @@ function setup() {
 
   //Add images
   dog.addImage(dogImg);
-  //dog.addImage(happyDogImg);
   dog.scale = 0.1;
 
   //Assigned firebase database to variable db
