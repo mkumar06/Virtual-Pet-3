@@ -1,12 +1,18 @@
+//REPOSITORY IN VIRTUAL PET 3
+
 //Create variables 
 var dog, happyDog, foodS, foodStock, lastFed, db;
 var dogImg, happyDogImg;
+var changeState, readState;
+var bedroom, garden, washroom;
 
-function preload()
-{
+function preload() {
 	//Load images 
   dogImg = loadImage("images/dogImg.png");
   happyDogImg = loadImage("images/dogImg1.png");
+  bedroom = loadImage("images/bedRoom.png");
+  garden = loadImage("images/Garden.png");
+  washroom = loadImage("images/washRoom.png");
 }
 
 function setup() {
@@ -26,11 +32,42 @@ function setup() {
     foodStock.on("value", readStock);
 
   fd = new Food()
+
+  //Read game state from database
+  readState = database.ref('gameState');
+  readState.on("value", function(data) {
+    gameState = data.val();
+  });
 }
 
 
 function draw() {  
   background(46, 139, 87);
+
+  if(gameState!="Hungry") {
+    feed.hide();
+    addFood.hide();
+    dog.remove();
+  }else {
+    feed.show();
+    addFood.show();
+    dog.addImage(sadDog);
+  }
+
+  currentTime = hour();
+  if(currentTime == (lastFed + 1)) {
+    update("Playing");
+    foodObj.garden();
+  }else if(currentTime == (lastFed + 2)) {
+    update("Sleeping")
+    foodObj.bedroom();
+  }else if(currentTime > (lastFed + 2) && currentTime <= (lastFed + 4)) {
+    update("Bathing");
+    foodObj.washroom();
+  }else {
+    update("Hungry");
+    foodObj.display();
+  }
 
   drawSprites();
   
@@ -72,5 +109,12 @@ function keyPressed() {
     writeStock(foodS);
     dog.changeImage(happyDogImg);
   }
+}
+
+//Function to update gameStates in database
+function update(state) {
+  database.ref('/').update({
+    gameState:state
+  });
 }
 
