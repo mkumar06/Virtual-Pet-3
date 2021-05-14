@@ -5,6 +5,7 @@ var dog, happyDog, foodS, foodStock, lastFed, db;
 var dogImg, happyDogImg;
 var changeState, readState;
 var bedroom, garden, washroom;
+var gameState;
 
 function preload() {
 	//Load images 
@@ -34,7 +35,7 @@ function setup() {
   fd = new Food()
 
   //Read game state from database
-  readState = database.ref('gameState');
+  readState = db.ref('gameState');
   readState.on("value", function(data) {
     gameState = data.val();
   });
@@ -57,16 +58,16 @@ function draw() {
   currentTime = hour();
   if(currentTime == (lastFed + 1)) {
     update("Playing");
-    foodObj.garden();
+    fd.garden();
   }else if(currentTime == (lastFed + 2)) {
     update("Sleeping")
-    foodObj.bedroom();
+    fd.bedroom();
   }else if(currentTime > (lastFed + 2) && currentTime <= (lastFed + 4)) {
     update("Bathing");
-    foodObj.washroom();
+    fd.washroom();
   }else {
     update("Hungry");
-    foodObj.display();
+    fd.display();
   }
 
   drawSprites();
@@ -113,7 +114,7 @@ function keyPressed() {
 
 //Function to update gameStates in database
 function update(state) {
-  database.ref('/').update({
+  db.ref('/').update({
     gameState:state
   });
 }
