@@ -55,6 +55,9 @@ function draw() {
     dog.addImage(sadDog);
   }
 
+  //Assigned value to lastFed (5/20)
+  lastFed = 0;
+
   currentTime = hour();
   if(currentTime == (lastFed + 1)) {
     update("Playing");
