@@ -14,6 +14,7 @@ function preload() {
   bedroom = loadImage("images/bedRoom.png");
   garden = loadImage("images/Garden.png");
   washroom = loadImage("images/washRoom.png");
+  sadDog = loadImage("images/Lazy.png");
 }
 
 function setup() {
@@ -23,6 +24,8 @@ function setup() {
 
   //Add images
   dog.addImage(dogImg);
+  dog.addImage("sad", sadDog);
+  dog.addImage("happy", happyDogImg);
   dog.scale = 0.1;
 
   //Assigned firebase database to variable db
@@ -39,6 +42,10 @@ function setup() {
   readState.on("value", function(data) {
     gameState = data.val();
   });
+
+  db.ref("lastFed").on("value", function(data) {
+    lastFed = data.val();
+  }); 
 }
 
 
@@ -46,23 +53,16 @@ function draw() {
   background(46, 139, 87);
 
   if(gameState!="Hungry") {
-    feed.hide();
-    addFood.hide();
-    dog.remove();
+    dog.changeImage("happy", happyDogImg);
   }else {
-    feed.show();
-    addFood.show();
-    dog.addImage(sadDog);
+    dog.changeImage("sad", sadDog);
   }
 
-  //Assigned value to lastFed (5/20)
-  lastFed = 0;
-
   currentTime = hour();
-  if(currentTime == (lastFed + 1)) {
+  if(currentTime == (lastFed)) {
     update("Playing");
     fd.garden();
-  }else if(currentTime == (lastFed + 2)) {
+  }else if(currentTime == (lastFed + 1)) {
     update("Sleeping")
     fd.bedroom();
   }else if(currentTime > (lastFed + 2) && currentTime <= (lastFed + 4)) {
@@ -74,6 +74,14 @@ function draw() {
   }
 
   drawSprites();
+
+  if(lastFed > 12) {
+    text("Last Fed: " + lastFed % 12 + "PM", 350, 30);
+  } else if(lastFed == 0) {
+    text("Last Fed: 12 AM" , 350, 30);
+  } else {
+    text("Last Fed: " + lastFed, 350, 30);
+  }
   
   //Print text and add styles 
   fill("blue");
@@ -81,13 +89,6 @@ function draw() {
   text("Food stock: " + foodS, 400, 20);
 
   fd.display()
-}
-if(lastFed > 12) {
-  text("Last Fed: " + lastFed % 12 + "PM", 350, 30);
-} else if(lastFed == 0) {
-  text("Last Fed: 12 AM" , 350, 30);
-} else {
-  text("Last Fed: " + lastFed + "AM", 350, 30);
 }
 
 //Function to read values from DB
@@ -112,6 +113,8 @@ function keyPressed() {
   if(keyCode === UP_ARROW) {
     writeStock(foodS);
     dog.changeImage(happyDogImg);
+    lastFed = hour()
+    db.ref("/").update({lastFed:lastFed})
   }
 }
 
